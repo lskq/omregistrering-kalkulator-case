@@ -29,10 +29,10 @@ public class OmregistreringKalkulator {
                 return 1670;
             } else {
                 if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (egenvekt < 1200) {
-                        return 4378;
-                    } else {
+                    if (egenvekt > 1200) {
                         return 6681;
+                    } else {
+                        return 4378;
                     }
                 } else {
                     return 2189;
@@ -43,10 +43,10 @@ public class OmregistreringKalkulator {
                 return 1009;
             } else {
                 if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (egenvekt < 1200) {
-                        return 2880;
-                    } else {
+                    if (egenvekt > 1200) {
                         return 4034;
+                    } else {
+                        return 2880;
                     }
                 } else {
                     return 1383;
