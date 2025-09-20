@@ -13,7 +13,8 @@ public class Kjoeretoey {
     /**
      * Et kjøretøy med følgende tekniske spesifikasjoner
      *
-     * @param kjennemerke                   Kjennemerke / registreringsnummer på bilen
+     * @param kjennemerke                   Kjennemerke / registreringsnummer på
+     *                                      bilen
      * @param egenvekt                      Bilens egenvekt (m/fører) på 75 kg
      * @param totalvekt                     Bilens tillatte totalvekt (lastet bil)
      * @param kjoeretoeytype                Kjøretøytype (personbil, varebil)
@@ -21,13 +22,12 @@ public class Kjoeretoey {
      * @param foerstegangsregistreringsdato Dato bilen ble førstegansregistrert
      */
     public Kjoeretoey(
-        String kjennemerke,
-        int egenvekt,
-        int totalvekt,
-        Kjoeretoeytype kjoeretoeytype,
-        Drivstoff drivstoff,
-        LocalDate foerstegangsregistreringsdato
-    ) {
+            String kjennemerke,
+            int egenvekt,
+            int totalvekt,
+            Kjoeretoeytype kjoeretoeytype,
+            Drivstoff drivstoff,
+            LocalDate foerstegangsregistreringsdato) {
         this.kjennemerke = kjennemerke;
         this.egenvekt = egenvekt;
         this.totalvekt = totalvekt;
