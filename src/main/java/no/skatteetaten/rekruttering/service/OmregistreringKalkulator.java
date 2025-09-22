@@ -17,19 +17,19 @@ public class OmregistreringKalkulator {
     public int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
         Drivstoff drivstoff = kjoeretoey.getDrivstoff();
         Kjoeretoeytype kjoeretoeytype = kjoeretoey.getKjoeretoeytype();
-        int egenvekt = kjoeretoey.getEgenvekt();
         int foerstegangsregistreringsaar = kjoeretoey.getFoerstegangsregistreringsdato().getYear();
+        boolean tungtKjoeretoey = kjoeretoey.getEgenvekt() > 1200;
+        boolean veteranKjoeretoey = LocalDate.now().getYear() - foerstegangsregistreringsaar > 30;
 
-        if (LocalDate.now().getYear() - foerstegangsregistreringsaar > 30) {
-            // Forskriften sier "30 år eller eldre" (>=30), men oppgaven sa
-            // "mer enn 30 år siden" (>30), så jeg gjør som oppgaven ber om.
+        if (veteranKjoeretoey) {
             return 0;
-        } else if (foerstegangsregistreringsaar > 2018) {
+
+        } else if (foerstegangsregistreringsaar >= 2019) {
             if (drivstoff == Drivstoff.ELEKTRISITET) {
                 return 1670;
             } else {
                 if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (egenvekt > 1200) {
+                    if (tungtKjoeretoey) {
                         return 6681;
                     } else {
                         return 4378;
@@ -38,12 +38,13 @@ public class OmregistreringKalkulator {
                     return 2189;
                 }
             }
-        } else if (foerstegangsregistreringsaar > 2010) {
+
+        } else if (foerstegangsregistreringsaar >= 2011) {
             if (drivstoff == Drivstoff.ELEKTRISITET) {
                 return 1009;
             } else {
                 if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (egenvekt > 1200) {
+                    if (tungtKjoeretoey) {
                         return 4034;
                     } else {
                         return 2880;
@@ -52,6 +53,7 @@ public class OmregistreringKalkulator {
                     return 1383;
                 }
             }
+
         } else {
             if (drivstoff == Drivstoff.ELEKTRISITET) {
                 return 432;
