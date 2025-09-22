@@ -19,9 +19,11 @@ export default function KjoeretoeyTabell() {
             <th>Kjøretøytype</th>
             <th>Drivstoff</th>
             <th>Førstegangsregistreringsdato</th>
+            <th className="knappTabell" />
             {
-                kjoeretoey.map(x => 
+                kjoeretoey.map((x, i) =>
                     <KjoeretoeyRad
+                        id = {i}
                         kjennemerke={x.kjennemerke}
                         egenvekt={x.egenvekt}
                         totalvekt={x.totalvekt}

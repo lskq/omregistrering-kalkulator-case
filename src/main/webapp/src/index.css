@@ -15,7 +15,32 @@ table {
     margin: auto;
 }
 
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+th, td {
+    background-color: beige;
+    padding: 4px 12px;
+}
+
+input:disabled {
+    border: none;
+    background-color: inherit;
+    color: inherit;
+}
+
+button {
+    color: white;
+    border-radius: 8px;
+    margin-right: 4px;
+}
+
+.leggTilKnapp {
+    background-color: darkorange;
+    margin: auto;
+}
+
+.redigerKnapp {
+    background-color: green;
+}
+
+.slettKnapp {
+    background-color: red;
 }
