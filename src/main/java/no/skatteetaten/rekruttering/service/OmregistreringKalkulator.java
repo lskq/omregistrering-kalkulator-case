@@ -10,11 +10,13 @@ import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
 public class OmregistreringKalkulator {
 
     /*
-     * @param kjoeretoey Teknisk data om et kjøretøy
+     * Gitt et kjoeretoey, kalkulerer satser for omregistrering anno 2022.
+     *
+     * @param kjoeretoey Teknisk data om et kjoeretoey
      * 
-     * @return Kjøretøyets omregistreringsavgift
+     * @return Kjoeretoeyets omregistreringsavgift
      */
-    public int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
+    public static int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
         Drivstoff drivstoff = kjoeretoey.getDrivstoff();
         Kjoeretoeytype kjoeretoeytype = kjoeretoey.getKjoeretoeytype();
         int foerstegangsregistreringsaar = kjoeretoey.getFoerstegangsregistreringsdato().getYear();
@@ -68,11 +70,14 @@ public class OmregistreringKalkulator {
     }
 
     /*
-     * @param kjennemerke Et kjøretøys kjennemerke
+     * Gitt et kjoeretoeys kjennemerke, kalkulerer satser for omregistrering anno
+     * 2022.
+     *
+     * @param kjennemerke Et kjoeretoeys kjennemerke
      * 
-     * @return Kjøretøyets omregistreringsavgift
+     * @return kjoeretoeyets omregistreringsavgift
      */
-    public int kalkulerAvgiftGittKjennemerke(String kjennemerke) {
+    public static int kalkulerAvgiftGittKjennemerke(String kjennemerke) {
         Kjoeretoey kjoeretoey = KjoeretoeyRegister.hentKjoeretoey(kjennemerke);
 
         return kalkulerAvgiftGittKjoeretoeydata(kjoeretoey);
