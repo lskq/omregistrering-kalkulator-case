@@ -3,13 +3,14 @@ import { useState, useEffect } from "react"
 import KjoeretoeyRad from "./KjoeretoeyRad";
 
 export default function KjoeretoeyTabell() {
-    const [kjoeretoey, settKjoeretoey] = useState({})
+    const [kjoeretoey, settKjoeretoey] = useState({});
+    const [redigertRad, settRedigertRad] = useState(undefined);
 
     useEffect(() => {
         fetch("http://localhost:8080/api/kjoeretoey/hentAlle")
             .then(res => res.json())
             .then(data => settKjoeretoey(data))
-    }, [])
+    }, [kjoeretoey])
 
     return (
         <table>
@@ -21,7 +22,7 @@ export default function KjoeretoeyTabell() {
             <th>Førstegangsregistreringsdato</th>
             <th className="knappTabell" />
             {
-                kjoeretoey.map((x, i) =>
+                Array.isArray(kjoeretoey) && kjoeretoey.map((x, i) =>
                     <KjoeretoeyRad
                         id = {i}
                         kjennemerke={x.kjennemerke}
@@ -30,6 +31,9 @@ export default function KjoeretoeyTabell() {
                         kjoeretoeytype={x.kjoeretoeytype}
                         drivstoff={x.drivstoff}
                         foerstegangsregistreringsdato={x.foerstegangsregistreringsdato}
+                        tabellRedigertRad={redigertRad}
+                        settTabellRedigertRad={settRedigertRad}
+                        settTabellKjoeretoey={settKjoeretoey}
                     />
                 )
             }

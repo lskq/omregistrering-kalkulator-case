@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 import RedigerKnapp from "./RedigerKnapp"
 import SlettKnapp from "./SlettKnapp"
 
@@ -10,10 +8,40 @@ export default function KjoeretoeyRad({
         totalvekt,
         kjoeretoeytype,
         drivstoff,
-        foerstegangsregistreringsdato
+        foerstegangsregistreringsdato,
+        tabellRedigertRad,
+        settTabellRedigertRad,
+        settTabellKjoeretoey
     }) {
-    const [rediger, settRediger] = useState(false)
-    const disabled = !rediger
+    const disabled = (id !== tabellRedigertRad);
+
+    function rediger() {
+        if (disabled) {
+            settTabellRedigertRad(id)
+        }
+        else {
+            fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/oppdater`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    kjennemerke: kjennemerke,
+                    egenvekt: 0,
+                    totalvekt: 0,
+                    kjoeretoeytype: "PERSONBIL",
+                    drivstoff: "BENSIN",
+                    foerstegangsregistreringsdato: "1111-01-01"
+                })
+            })
+
+            settTabellRedigertRad(undefined)
+            settTabellKjoeretoey({})
+        }
+    }
+
+    function slett() {
+        fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/fjern`, { method: 'DELETE' })
+        settTabellKjoeretoey({})
+    }
     
     return (
         <tr>
@@ -24,8 +52,8 @@ export default function KjoeretoeyRad({
             <td><input id={id+"drivstoff"} value={drivstoff} disabled={disabled} /></td>
             <td><input id={id+"foerstegangsregistreringsdato"} value={foerstegangsregistreringsdato} disabled={disabled} /></td>
             <td className="knappTabell">
-                <RedigerKnapp onClick={()=>settRediger(prev=>!prev)}/>
-                <SlettKnapp onClick={()=>console.log("slett " + id)}/></td>
+                <RedigerKnapp onClick={rediger}/>
+                <SlettKnapp onClick={slett}/></td>
         </tr>
     )
 }
