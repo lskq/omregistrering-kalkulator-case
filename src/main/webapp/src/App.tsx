@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './skatteetaten-logo.svg';
 import './App.css';
 
+import MeaCulpa from './components/MeaCulpa'
 import KjoeretoeyTabell from './components/KjoeretoeyTabell';
 import OmregistreringsKalkulator from './components/OmregistreringsKalkulator'
 
@@ -16,6 +17,7 @@ function App() {
         </div>
       </header>
       <main>
+          <MeaCulpa />
           <KjoeretoeyTabell />
           <OmregistreringsKalkulator />
       </main>

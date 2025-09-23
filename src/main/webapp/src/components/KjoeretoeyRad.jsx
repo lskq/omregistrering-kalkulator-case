@@ -1,4 +1,8 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
+
+/* I retrospekt er nok dette komponentet ganske overloadet. Raden for å registrere
+ nye kjøretøy burde nok ha vært et eget komponent - Det ville repetert kode, men vært
+ betydelig lettere å lese.*/
 
 export default function KjoeretoeyRad({
         id,
@@ -10,7 +14,8 @@ export default function KjoeretoeyRad({
         foerstegangsregistreringsdato,
         tabellRedigertRad,
         settTabellRedigertRad,
-        tabellRerender
+        refetchTable,
+        nyRad
     }) {
     const originaltKjoeretoey = {
         kjennemerke: kjennemerke,
@@ -23,23 +28,34 @@ export default function KjoeretoeyRad({
 
     const [redigertKjoeretoey, settRedigertKjoeretoey] = useState(originaltKjoeretoey)
 
-    const underRedigering = (id === tabellRedigertRad);
+    const underRedigering = (id === tabellRedigertRad) || nyRad;
 
     function sendOnClick() {
+        const ingenTommeFelt =  redigertKjoeretoey.kjennemerke &&
+                                redigertKjoeretoey.egenvekt &&
+                                redigertKjoeretoey.totalvekt &&
+                                redigertKjoeretoey.kjoeretoeytype &&
+                                redigertKjoeretoey.drivstoff &&
+                                redigertKjoeretoey.foerstegangsregistreringsdato
+
         const stringifiedRedigertKjoeretoey = JSON.stringify(redigertKjoeretoey)
-        if (JSON.stringify(originaltKjoeretoey) !== stringifiedRedigertKjoeretoey) {
-            fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/oppdater`, {
-                method: 'PUT',
+
+        console.log(stringifiedRedigertKjoeretoey)
+
+        if (ingenTommeFelt && JSON.stringify(originaltKjoeretoey) !== stringifiedRedigertKjoeretoey) {
+            fetch(`http://localhost:8080/api/kjoeretoey/${redigertKjoeretoey.kjennemerke}/${nyRad ? "opprett": "oppdater"}`,{
+                method: nyRad ? "POST" : "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: stringifiedRedigertKjoeretoey
             })
-            settTabellRedigertRad(undefined)
+                .then(refetchTable)
+                .then(settTabellRedigertRad(undefined))
         }
     }
 
     function slettOnClick() {
         fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/fjern`, { method: 'DELETE' })
-        tabellRerender()
+            .then(refetchTable)
     }
 
     function kjoeretoeyverdiOnChange(event, noekkel) {
@@ -50,16 +66,16 @@ export default function KjoeretoeyRad({
     
     return (
         <tr>
-            <td>{kjennemerke}</td>
+            <td><input id={id+"kjennemerke"} type="text" value={redigertKjoeretoey.kjennemerke} disabled={!nyRad} onChange={e => kjoeretoeyverdiOnChange(e, "kjennemerke")} /></td>
             <td><input id={id+"egenvekt"} type="number" value={redigertKjoeretoey.egenvekt} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "egenvekt")} /></td>
             <td><input id={id+"totalvekt"} type="number" value={redigertKjoeretoey.totalvekt} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "totalvekt")} /></td>
             <td><select
-            id={id+"kjoeretoeytype"} value={redigertKjoeretoey.kjoeretoeytype} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "kjoeretoeytype")}
+            id={id+"kjoeretoeytype"} value={redigertKjoeretoey.kjoeretoeytype ? redigertKjoeretoey.kjoeretoeytype : "PERSONBIL"} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "kjoeretoeytype")}
             >
                 <option value="PERSONBIL">PERSONBIL</option>
                 <option value="VAREBIL">VAREBIL</option>
             </select></td>
-            <td><select id={id+"drivstoff"} value={redigertKjoeretoey.drivstoff} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "drivstoff")}>
+            <td><select id={id+"drivstoff"} value={redigertKjoeretoey.drivstoff ? redigertKjoeretoey.drivstoff : "BENSIN"} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "drivstoff")}>
                 <option value="BENSIN">BENSIN</option>
                 <option value="DIESEL">DIESEL</option>
                 <option value="ELEKTRISITET">ELEKTRISITET</option>
@@ -72,12 +88,15 @@ export default function KjoeretoeyRad({
                 onChange={e => kjoeretoeyverdiOnChange(e, "foerstegangsregistreringsdato")}
             /></td>
             <td className="knappTabell">
-                <button className="groennKnapp" onClick={()=> underRedigering ?  sendOnClick() : settTabellRedigertRad(id)}>
-                    {underRedigering ? "Send" : "Rediger"}
+                <button className={nyRad ? "oransjeKnapp" : "groennKnapp"} onClick={()=> underRedigering ?  sendOnClick() : settTabellRedigertRad(id)}>
+                    {nyRad ? "Legg til" : underRedigering ? "Send" : "Rediger"}
                 </button>
-                <button className="roedKnapp" onClick={()=> underRedigering ? settTabellRedigertRad(undefined) : slettOnClick()}>
-                    {underRedigering ? "Avbryt" : "Slett"}
-                </button>
+                {
+                    !nyRad &&
+                    <button className="roedKnapp" onClick={()=> underRedigering ? settTabellRedigertRad(undefined) : slettOnClick()}>
+                        {underRedigering ? "Avbryt" : "Slett"}
+                    </button>
+                }
             </td>
         </tr>
     )

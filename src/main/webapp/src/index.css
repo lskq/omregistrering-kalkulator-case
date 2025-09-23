@@ -11,6 +11,12 @@ code {
     monospace;
 }
 
+p {
+    max-width: 80%;
+    margin: auto;
+    padding: 8px 0px;
+}
+
 table {
     margin: auto;
 }
@@ -38,9 +44,8 @@ button {
     margin-right: 4px;
 }
 
-oransjeKnapp {
+.oransjeKnapp {
     background-color: darkorange;
-    margin: auto;
 }
 
 .groennKnapp {
@@ -53,4 +58,5 @@ oransjeKnapp {
 
 .svartKnapp {
     background-color: black;
+    margin-left: 8px;
 }

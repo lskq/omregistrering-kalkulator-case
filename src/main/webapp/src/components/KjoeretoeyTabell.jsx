@@ -4,22 +4,17 @@ import KjoeretoeyRad from "./KjoeretoeyRad";
 
 export default function KjoeretoeyTabell() {
     const [kjoeretoey, settKjoeretoey] = useState({})
-    const [render, settRender] = useState(false)
     const [redigertRad, settRedigertRad] = useState(undefined)
+    const [refetch, settRefetch] = useState(false);
 
     useEffect(() => {
         fetch("http://localhost:8080/api/kjoeretoey/hentAlle")
             .then(res => res.json())
             .then(data => settKjoeretoey(data))
-        console.log("EFFECT")
-    }, [render])
-    
-    function rerender() {
-        settRender(prev => !prev)
-    }
+    }, [refetch])
+
     return (
-        <section id="Oppgave1og2">
-            <h2>Oppgave 1 & 2</h2>
+        <section>
             <table>
                 <thead>
                     <tr>
@@ -46,10 +41,25 @@ export default function KjoeretoeyTabell() {
                                 foerstegangsregistreringsdato={x.foerstegangsregistreringsdato}
                                 tabellRedigertRad={redigertRad}
                                 settTabellRedigertRad={settRedigertRad}
-                                tabellRerender={rerender}
+                                refetchTable={()=>settRefetch(prev=>!prev)}
+                                nyRad={false}
                             />
                         )
                     }
+                    <KjoeretoeyRad
+                        key={-1}
+                        id = {-1}
+                        kjennemerke={""}
+                        egenvekt={""}
+                        totalvekt={""}
+                        kjoeretoeytype={"PERSONBIL"}
+                        drivstoff={"BENSIN"}
+                        foerstegangsregistreringsdato={""}
+                        tabellRedigertRad={redigertRad}
+                        settTabellRedigertRad={settRedigertRad}
+                        refetchTable={()=>settRefetch(prev=>!prev)}
+                        nyRad={true}
+                    />
                 </tbody>
             </table>
         </section>

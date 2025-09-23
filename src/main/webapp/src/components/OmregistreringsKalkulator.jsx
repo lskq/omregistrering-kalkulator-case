@@ -13,7 +13,7 @@ export default function OmregistreringsKalkulator() {
     
     return (
         <section id="Oppgave3">
-            <h2>Oppgave 3</h2>
+            <h3>Omregistreringskalkulator</h3>
             <input type="text" placeholder="e.g. PN98765" value={kjennemerke} onChange={e => settKjennemerke(e.target.value)}/>
             <button className="svartKnapp" onClick={kalkulerOnClick}>Kalkuler</button>
             {(avgift !== undefined) && <p>Avgiften er {avgift} kr.</p>}
