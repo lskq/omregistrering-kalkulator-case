@@ -3,6 +3,7 @@ import logo from './skatteetaten-logo.svg';
 import './App.css';
 
 import KjoeretoeyTabell from './components/KjoeretoeyTabell';
+import OmregistreringsKalkulator from './components/OmregistreringsKalkulator'
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         </div>
       </header>
       <main>
-        {<KjoeretoeyTabell />}
+          <KjoeretoeyTabell />
+          <OmregistreringsKalkulator />
       </main>
       <footer>Skatteetaten 2023</footer>
     </div>

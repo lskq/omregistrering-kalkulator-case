@@ -1,5 +1,4 @@
-import RedigerKnapp from "./RedigerKnapp"
-import SlettKnapp from "./SlettKnapp"
+import { useEffect, useState } from "react"
 
 export default function KjoeretoeyRad({
         id,
@@ -11,49 +10,75 @@ export default function KjoeretoeyRad({
         foerstegangsregistreringsdato,
         tabellRedigertRad,
         settTabellRedigertRad,
-        settTabellKjoeretoey
+        tabellRerender
     }) {
-    const disabled = (id !== tabellRedigertRad);
+    const originaltKjoeretoey = {
+        kjennemerke: kjennemerke,
+        egenvekt: egenvekt,
+        totalvekt: totalvekt,
+        kjoeretoeytype: kjoeretoeytype,
+        drivstoff: drivstoff,
+        foerstegangsregistreringsdato: foerstegangsregistreringsdato
+    }
 
-    function rediger() {
-        if (disabled) {
-            settTabellRedigertRad(id)
-        }
-        else {
+    const [redigertKjoeretoey, settRedigertKjoeretoey] = useState(originaltKjoeretoey)
+
+    const underRedigering = (id === tabellRedigertRad);
+
+    function sendOnClick() {
+        const stringifiedRedigertKjoeretoey = JSON.stringify(redigertKjoeretoey)
+        if (JSON.stringify(originaltKjoeretoey) !== stringifiedRedigertKjoeretoey) {
             fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/oppdater`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    kjennemerke: kjennemerke,
-                    egenvekt: 0,
-                    totalvekt: 0,
-                    kjoeretoeytype: "PERSONBIL",
-                    drivstoff: "BENSIN",
-                    foerstegangsregistreringsdato: "1111-01-01"
-                })
+                body: stringifiedRedigertKjoeretoey
             })
-
             settTabellRedigertRad(undefined)
-            settTabellKjoeretoey({})
         }
     }
 
-    function slett() {
+    function slettOnClick() {
         fetch(`http://localhost:8080/api/kjoeretoey/${kjennemerke}/fjern`, { method: 'DELETE' })
-        settTabellKjoeretoey({})
+        tabellRerender()
+    }
+
+    function kjoeretoeyverdiOnChange(event, noekkel) {
+        settRedigertKjoeretoey(
+            {...redigertKjoeretoey, [noekkel]: event.target.value}
+        )
     }
     
     return (
         <tr>
-            <td><input id={id+"kjennemerke"} value={kjennemerke} disabled={disabled} /></td>
-            <td><input id={id+"egenvekt"} value={egenvekt} disabled={disabled} /></td>
-            <td><input id={id+"totalvekt"} value={totalvekt} disabled={disabled} /></td>
-            <td><input id={id+"kjoeretoeytype"} value={kjoeretoeytype} disabled={disabled} /></td>
-            <td><input id={id+"drivstoff"} value={drivstoff} disabled={disabled} /></td>
-            <td><input id={id+"foerstegangsregistreringsdato"} value={foerstegangsregistreringsdato} disabled={disabled} /></td>
+            <td>{kjennemerke}</td>
+            <td><input id={id+"egenvekt"} type="number" value={redigertKjoeretoey.egenvekt} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "egenvekt")} /></td>
+            <td><input id={id+"totalvekt"} type="number" value={redigertKjoeretoey.totalvekt} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "totalvekt")} /></td>
+            <td><select
+            id={id+"kjoeretoeytype"} value={redigertKjoeretoey.kjoeretoeytype} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "kjoeretoeytype")}
+            >
+                <option value="PERSONBIL">PERSONBIL</option>
+                <option value="VAREBIL">VAREBIL</option>
+            </select></td>
+            <td><select id={id+"drivstoff"} value={redigertKjoeretoey.drivstoff} disabled={!underRedigering} onChange={e => kjoeretoeyverdiOnChange(e, "drivstoff")}>
+                <option value="BENSIN">BENSIN</option>
+                <option value="DIESEL">DIESEL</option>
+                <option value="ELEKTRISITET">ELEKTRISITET</option>
+            </select></td>
+            <td><input
+                id={id+"foerstegangsregistreringsdato"}
+                type="date"
+                value={redigertKjoeretoey.foerstegangsregistreringsdato}
+                disabled={!underRedigering}
+                onChange={e => kjoeretoeyverdiOnChange(e, "foerstegangsregistreringsdato")}
+            /></td>
             <td className="knappTabell">
-                <RedigerKnapp onClick={rediger}/>
-                <SlettKnapp onClick={slett}/></td>
+                <button className="groennKnapp" onClick={()=> underRedigering ?  sendOnClick() : settTabellRedigertRad(id)}>
+                    {underRedigering ? "Send" : "Rediger"}
+                </button>
+                <button className="roedKnapp" onClick={()=> underRedigering ? settTabellRedigertRad(undefined) : slettOnClick()}>
+                    {underRedigering ? "Avbryt" : "Slett"}
+                </button>
+            </td>
         </tr>
     )
 }

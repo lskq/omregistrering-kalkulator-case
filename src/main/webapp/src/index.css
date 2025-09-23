@@ -20,6 +20,12 @@ th, td {
     padding: 4px 12px;
 }
 
+input {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
 input:disabled {
     border: none;
     background-color: inherit;
@@ -32,15 +38,19 @@ button {
     margin-right: 4px;
 }
 
-.leggTilKnapp {
+oransjeKnapp {
     background-color: darkorange;
     margin: auto;
 }
 
-.redigerKnapp {
+.groennKnapp {
     background-color: green;
 }
 
-.slettKnapp {
+.roedKnapp {
     background-color: red;
+}
+
+.svartKnapp {
+    background-color: black;
 }
