@@ -9,9 +9,9 @@ import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
 
 public class OmregistreringKalkulator {
     /*
-     * Gitt et kjoeretoey og satser, kalkulerer satsen for omregistreringsavgift.
+     * Gitt et kjøretøy og satser, kalkulerer satsen for omregistreringsavgift.
      *
-     * @param kjoeretoey Teknisk data om et kjoeretoey
+     * @param kjøretøy Teknisk data om et kjøretøy
      * 
      * @param tungPersonbilSats Sats for personbiler >1200kg
      * 
@@ -21,7 +21,7 @@ public class OmregistreringKalkulator {
      * 
      * @param elektriskBilSats Sats for elektriske biler
      * 
-     * @return Kjoeretoeyets omregistreringsavgift
+     * @return Kjøretøyets omregistreringsavgift
      */
     public static int kalkulerAvgiftGittKjoeretoeydataOgSatser(
             Kjoeretoey kjoeretoey,
@@ -49,11 +49,11 @@ public class OmregistreringKalkulator {
     }
 
     /*
-     * Gitt et kjoeretoey, kalkulerer satser for omregistrering anno 2022.
+     * Gitt et kjøretøy, kalkulerer satser for omregistrering anno 2022.
      *
-     * @param kjoeretoey Teknisk data om et kjoeretoey
+     * @param kjøretøy Teknisk data om et kjøretøy
      * 
-     * @return Kjoeretoeyets omregistreringsavgift
+     * @return Kjøretøyets omregistreringsavgift
      */
     public static int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
         int foerstegangsregistreringsaar = kjoeretoey.getFoerstegangsregistreringsdato().getYear();
@@ -90,12 +90,12 @@ public class OmregistreringKalkulator {
     }
 
     /*
-     * Gitt et kjoeretoeys kjennemerke, kalkulerer satser for omregistrering anno
+     * Gitt et kjøretøys kjennemerke, kalkulerer satser for omregistrering anno
      * 2022.
      *
-     * @param kjennemerke Et kjoeretoeys kjennemerke
+     * @param kjennemerke Et kjøretøys kjennemerke
      * 
-     * @return kjoeretoeyets omregistreringsavgift
+     * @return kjøretøyets omregistreringsavgift
      */
     public static int kalkulerAvgiftGittKjennemerke(String kjennemerke) {
         Kjoeretoey kjoeretoey = KjoeretoeyRegister.hentKjoeretoey(kjennemerke);
