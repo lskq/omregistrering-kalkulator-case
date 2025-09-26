@@ -13,13 +13,13 @@ public class OmregistreringKalkulator {
      *
      * @param kjoeretoey Teknisk data om et kjoeretoey
      * 
-     * @param elektriskBilSats Sats for elektriske biler
-     * 
      * @param tungPersonbilSats Sats for personbiler >1200kg
      * 
      * @param lettPersonbilSats Sats for personbiler <=1200kg
      * 
      * @param varebilSats Sats for varebiler
+     * 
+     * @param elektriskBilSats Sats for elektriske biler
      * 
      * @return Kjoeretoeyets omregistreringsavgift
      */
