@@ -11,6 +11,7 @@ export default function KjoeretoeyTabell() {
         fetch("http://localhost:8080/api/kjoeretoey/hentAlle")
             .then(res => res.json())
             .then(data => settKjoeretoey(data))
+        return settKjoeretoey({})
     }, [refetch])
 
     return (

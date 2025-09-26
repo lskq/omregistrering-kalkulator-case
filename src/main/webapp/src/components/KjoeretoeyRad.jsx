@@ -49,6 +49,7 @@ export default function KjoeretoeyRad({
                 body: stringifiedRedigertKjoeretoey
             })
                 .then(refetchTable)
+                .then(()=> { if (nyRad) {settRedigertKjoeretoey(originaltKjoeretoey)} })
                 .then(settTabellRedigertRad(undefined))
         }
     }
