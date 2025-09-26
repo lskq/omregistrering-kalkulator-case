@@ -40,8 +40,6 @@ export default function KjoeretoeyRad({
 
         const stringifiedRedigertKjoeretoey = JSON.stringify(redigertKjoeretoey)
 
-        console.log(stringifiedRedigertKjoeretoey)
-
         if (ingenTommeFelt && JSON.stringify(originaltKjoeretoey) !== stringifiedRedigertKjoeretoey) {
             fetch(`http://localhost:8080/api/kjoeretoey/${redigertKjoeretoey.kjennemerke}/${nyRad ? "opprett": "oppdater"}`,{
                 method: nyRad ? "POST" : "PUT",
