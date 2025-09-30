@@ -10,72 +10,95 @@ import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
 public class OmregistreringKalkulator {
 
     /*
-     * Gitt et kjoeretoey, kalkulerer satser for omregistrering anno 2022.
-     *
-     * @param kjoeretoey Teknisk data om et kjoeretoey
+     * Kalkuler satser for omregistrering av et kjøretøy, gitt kjøretøysdata og satser.
+     * Tar ikke forbehold for veteranstatus.
      * 
-     * @return Kjoeretoeyets omregistreringsavgift
+     * @param kjoeretoey Teknisk data om et kjøretøy
+     * 
+     * @param tungPersonbilSats Sats for personbiler >1200kg
+     * 
+     * @param lettPersonbilSats Sats for personbiler <=1200kg
+     * 
+     * @param varebilSats Sats for varebiler
+     * 
+     * @param elektriskSats Sats for elektriske kjøretøy
+     * 
+     * @return Kjøretøyets omregistreringsavgift
+     * 
      */
-    public static int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
-        Drivstoff drivstoff = kjoeretoey.getDrivstoff();
-        Kjoeretoeytype kjoeretoeytype = kjoeretoey.getKjoeretoeytype();
-        int foerstegangsregistreringsaar = kjoeretoey.getFoerstegangsregistreringsdato().getYear();
+    public static int kalkulerAvgiftGittKjoeretoeydataOgSatser(
+        Kjoeretoey kjoeretoey,
+        int tungPersonbilSats,
+        int lettPersonbilSats,
+        int varebilSats,
+        int elektriskSats
+    ) {
+        boolean elektrisk = kjoeretoey.getDrivstoff() == Drivstoff.ELEKTRISITET;
+        boolean personbil = kjoeretoey.getKjoeretoeytype() == Kjoeretoeytype.PERSONBIL;
         boolean tungtKjoeretoey = kjoeretoey.getEgenvekt() > 1200;
-        boolean veteranKjoeretoey = LocalDate.now().getYear() - foerstegangsregistreringsaar > 30;
 
-        if (veteranKjoeretoey) {
-            return 0;
-
-        } else if (foerstegangsregistreringsaar >= 2019) {
-            if (drivstoff == Drivstoff.ELEKTRISITET) {
-                return 1670;
-            } else {
-                if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (tungtKjoeretoey) {
-                        return 6681;
-                    } else {
-                        return 4378;
-                    }
-                } else {
-                    return 2189;
-                }
-            }
-
-        } else if (foerstegangsregistreringsaar >= 2011) {
-            if (drivstoff == Drivstoff.ELEKTRISITET) {
-                return 1009;
-            } else {
-                if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    if (tungtKjoeretoey) {
-                        return 4034;
-                    } else {
-                        return 2880;
-                    }
-                } else {
-                    return 1383;
-                }
-            }
-
+        if (elektrisk) {
+            return elektriskSats;
         } else {
-            if (drivstoff == Drivstoff.ELEKTRISITET) {
-                return 432;
-            } else {
-                if (kjoeretoeytype == Kjoeretoeytype.PERSONBIL) {
-                    return 1729;
+            if (personbil) {
+                if (tungtKjoeretoey) {
+                    return tungPersonbilSats;
                 } else {
-                    return 1154;
+                    return lettPersonbilSats;
                 }
+            } else {
+                return varebilSats;
             }
         }
     }
 
     /*
-     * Gitt et kjoeretoeys kjennemerke, kalkulerer satser for omregistrering anno
+     * Kalkulerer satser for omregistrering anno 2022, gitt et kjøretøy.
+     *
+     * @param kjoeretoey Teknisk data om et kjøretøy
+     * 
+     * @return Kjøretøyets omregistreringsavgift anno 2022
+     */
+    public static int kalkulerAvgiftGittKjoeretoeydata(Kjoeretoey kjoeretoey) {
+        int foerstegangsregistreringsaar = kjoeretoey.getFoerstegangsregistreringsdato().getYear();
+        boolean veteranKjoeretoey = LocalDate.now().getYear() - foerstegangsregistreringsaar > 30;
+        
+        if (veteranKjoeretoey) {
+            return 0;
+        } else if (foerstegangsregistreringsaar >= 2019) {
+            return  kalkulerAvgiftGittKjoeretoeydataOgSatser(
+                        kjoeretoey,
+                        6681,
+                        4378,
+                        2189,
+                        1670
+                    );
+        } else if (foerstegangsregistreringsaar >= 2011) {
+            return  kalkulerAvgiftGittKjoeretoeydataOgSatser(
+                        kjoeretoey,
+                        4034,
+                        2880,
+                        1383,
+                        1009
+                    );
+        } else { // Før 2011
+            return  kalkulerAvgiftGittKjoeretoeydataOgSatser(
+                        kjoeretoey,
+                        1729,
+                        1729,
+                        1154,
+                        432
+                    );
+        }
+    }
+
+    /*
+     * Gitt et kjøretøys kjennemerke, kalkulerer satser for omregistrering anno
      * 2022.
      *
-     * @param kjennemerke Et kjoeretoeys kjennemerke
+     * @param kjennemerke Et kjøretøys kjennemerke
      * 
-     * @return kjoeretoeyets omregistreringsavgift
+     * @return kjøretøyets omregistreringsavgift
      */
     public static int kalkulerAvgiftGittKjennemerke(String kjennemerke) {
         Kjoeretoey kjoeretoey = KjoeretoeyRegister.hentKjoeretoey(kjennemerke);
