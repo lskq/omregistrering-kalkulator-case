@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import KjoeretoeyRad from "./KjoeretoeyRad";
 
 export default function KjoeretoeyTabell() {
-    const [kjoeretoey, settKjoeretoey] = useState({})
+    const [kjoeretoey, settKjoeretoey] = useState(null)
     const [redigertRad, settRedigertRad] = useState(undefined)
     const [refetch, settRefetch] = useState(false);
 
@@ -11,6 +11,7 @@ export default function KjoeretoeyTabell() {
         fetch("http://localhost:8080/api/kjoeretoey/hentAlle")
             .then(res => res.json())
             .then(data => settKjoeretoey(data))
+        return settKjoeretoey(null)
     }, [refetch])
 
     return (
