@@ -30,7 +30,7 @@ export default function KjoeretoeyTabell() {
                 </thead>
                 <tbody>
                     {
-                        Array.isArray(kjoeretoey) && kjoeretoey.map((x, i) =>
+                        kjoeretoey ? kjoeretoey.map((x, i) =>
                             <KjoeretoeyRad
                                 key={i}
                                 id = {i}
@@ -45,7 +45,7 @@ export default function KjoeretoeyTabell() {
                                 refetchTable={()=>settRefetch(prev=>!prev)}
                                 nyRad={false}
                             />
-                        )
+                        ) : null
                     }
                     <KjoeretoeyRad
                         key={-1}

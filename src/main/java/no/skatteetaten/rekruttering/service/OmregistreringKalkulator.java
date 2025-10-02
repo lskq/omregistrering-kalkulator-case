@@ -10,8 +10,8 @@ import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
 public class OmregistreringKalkulator {
 
     /*
-     * Kalkuler satser for omregistrering av et kjøretøy, gitt kjøretøysdata og satser.
-     * Tar ikke forbehold for veteranstatus.
+     * Kalkuler omregistreringsavgift for et kjøretøy, gitt kjøretøysdata og satser.
+     * Tar ikke forbehold for veteranbilstatus.
      * 
      * @param kjoeretoey Teknisk data om et kjøretøy
      * 
@@ -53,7 +53,8 @@ public class OmregistreringKalkulator {
     }
 
     /*
-     * Kalkulerer satser for omregistrering anno 2022, gitt et kjøretøy.
+     * Kalkulerer omregistreringsavgift med 2022 satser, gitt et kjøretøy.
+     * Tar forbehold for veteranbilstatus.
      *
      * @param kjoeretoey Teknisk data om et kjøretøy
      * 
